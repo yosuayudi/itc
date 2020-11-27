@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CRUD</title>
+  <link href="/assets/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+  <div class="container">
+    <h2>Planing List</h2>
+		<button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Add New</button>
+    <a href="/logout" class="btn btn-success">Logout</a>
+    <table class="table table-striped" id="mytable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nama Karyawan</th>
+          <th>Plan</th>
+          <th>Tanggal</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+         {{#each results}}
+        <tr>
+          <td>{{ id_plan }}</td>
+          <td>{{ nama_karyawan1 }}</td>
+          <td>{{ planing }}</td>
+          <td>{{ tgl_plan }}</td>
+          <td>
+            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{ id_plan }}" data-nama_karyawan1="{{ nama_karyawan1 }}" data-tgl_plan="{{ tgl_plan }}">Edit</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ id_plan }}">Delete</a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+	<!-- Add New karyawan Modal-->
+	  <form action="/save" method="post">
+        <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLabel">Add New Planing</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+               </button>
+             </div>
+             <div class="modal-body">
+               <div class="form-group">
+                   <input type="text" name="nama_karyawan1" class="form-control" placeholder="karyawan Name" required>
+               </div>
+
+               <div class="form-group">
+                   <input type="text" name="tgl_plan" class="form-control" placeholder="gaji" required>
+               </div>
+               <div class="form-group">
+                   <input type="text" name="planing" class="form-control" placeholder="Alamat" required>
+               </div>                
+             </div>
+             <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button type="submit" class="btn btn-primary">Save</button>
+             </div>
+           </div>
+         </div>
+        </div>
+	 </form>
+
+	 <!-- Edit karyawan Modal-->
+   <form action="/update" method="post">
+       <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit Karyawan</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                  <input type="text" name="nama_karyawan1" class="form-control nama_karyawan1" placeholder="karyawan Name" required>
+              </div>
+
+              <div class="form-group">
+                  <input type="text" name="tgl_plan" class="form-control gaji" placeholder="gaji" required>
+              </div>
+              <div class="form-group">
+                   <input type="text" name="planing" class="form-control planing" placeholder="alamat" required>
+               </div> 
+            </div>
+            <div class="modal-footer">
+              <input type="hidden" name="id" class="id_plan">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </div>
+        </div>
+       </div>
+  </form>
+
+	 <!-- Delete karyawan Modal-->
+ 	  <form id="add-row-form" action="/delete" method="post">
+ 	     <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ 	        <div class="modal-dialog">
+ 	           <div class="modal-content">
+ 	               <div class="modal-header">
+									 	<h5 class="modal-title" id="myModalLabel">Delete Karyawan</h5>
+ 	                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+ 	               </div>
+ 	               <div class="modal-body">
+												 <strong>Are You Sure To Delete This Data?</strong>
+ 	               </div>
+ 	               <div class="modal-footer">
+									 		<input type="hidden" name="id_plan" class="form-control id_plan2" required>
+ 	                   	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+ 	                  	<button type="submit" class="btn btn-success">Delete</button>
+ 	               </div>
+ 	      			</div>
+ 	        </div>
+ 	     </div>
+ 	 </form>
+
+<script src="/assets/js/jquery-3.3.1.js"></script>
+<script src="/assets/js/bootstrap.js"></script>
+<script>
+    $(document).ready(function(){
+			//showing data to modal for edit record
+      $('#mytable').on('click','.edit',function(){
+        var id_plan = $(this).data('id');
+        var nama_karyawan1 = $(this).data('nama_karyawan1');
+        var tgl_plan = $(this).data('tgl_plan');
+         var planing = $(this).data('planing');
+        $('#EditModal').modal('show');
+        $('.nama_karyawan1').val(nama_karyawan1);
+        $('.gaji').val(tgl_plan);
+        $('.planing').val(planing);
+        $('.id_plan').val(id_plan);
+      });
+			//showing modal for delete record
+			$('#mytable').on('click','.delete',function(){
+        var id_plan = $(this).data('id');
+        $('#DeleteModal').modal('show');
+        $('.id_plan2').val(id_plan);
+      });
+
+    });
+</script>
+</body>
+</html>
